@@ -1,0 +1,32 @@
+#!/bin/sh
+
+GW_USER=GW_USER
+GW_HOST=GW_HOST
+
+BASEDIR=`dirname $0`
+CONFIG_T=${BASEDIR}/config.template
+CONFIG=${BASEDIR}/config
+HOSTS=${BASEDIR}/hosts
+
+REMOTE_HOST=$1
+REMOTE_USER=`grep "^$1 " ${HOSTS} | awk '{print $2}'`
+REMOTE_ADDR=`grep "^$1 " ${HOSTS} | awk '{print $3}'`
+
+if [ ! ${REMOTE_ADDR} ]; then
+    exit 0
+fi
+
+touch ${CONFIG}
+
+grep -q "^Host ${1}$" ${CONFIG} && exit 0
+
+cat ${CONFIG_T} \
+| sed -e "s/GW_HOST/${GW_HOST}/" \
+| sed -e "s/GW_USER/${GW_USER}/" \
+| sed -e "s/REMOTE_HOST/${REMOTE_HOST}/" \
+| sed -e "s/REMOTE_USER/${REMOTE_USER}/" \
+| sed -e "s/REMOTE_ADDR/${REMOTE_ADDR}/" \
+> ${CONFIG}
+
+echo "chg_config : `grep "^$1 " ${HOSTS}`"
+

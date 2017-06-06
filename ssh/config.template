@@ -1,0 +1,20 @@
+
+Host localhost
+   User root
+Host
+
+Host REMOTE_ADDR
+   User REMOTE_USER
+   ForwardX11 yes
+   ForwardX11Trusted yes
+Host
+
+#Host REMOTE_HOST
+#   User REMOTE_USER
+#   ProxyCommand ssh GW_USER@GW_HOST nc REMOTE_ADDR %p
+#   ForwardX11 yes
+#   ForwardX11Trusted yes
+#Host
+
+SendEnv LC_MESSAGES
+

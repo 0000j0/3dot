@@ -1,0 +1,13 @@
+only
+
+split
+split
+
+select 2
+
+focus down
+select 1
+
+focus down
+select 0
+

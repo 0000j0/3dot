@@ -1,0 +1,13 @@
+
+screen -t C:local 2 zsh -l
+screen -t D:local 3 zsh -l
+screen -t E:local 4 zsh -l
+
+escape x
+
+caption always '%?%F%{= cW}%:%{= Kk}%?%2n%f%07=%t%='
+hardstatus alwayslastline ' %{= .y}B[%H]%{-} %L=%-w%45L>%{=u wk}%n %t%{-}%+w %-17<%=%{= .m}%m/%d %02c:%s %A '
+
+source $BD/screen/layout/type_01
+layout select 2W
+

@@ -1,0 +1,10 @@
+only
+
+split
+
+select 1
+resize -v 90%
+
+focus down
+select 0
+

@@ -1,0 +1,80 @@
+
+if [ ! "${DOT_SSH}" ]; then
+    DOT_SSH=${HOME}/.ssh
+fi
+
+if [ ! "${SSH_AGENT_FILE}" ]; then
+    SSH_AGENT_FILE=${DOT_SSH}/.ssh-agent
+fi
+
+ps -ef | grep -v grep | grep -q ssh-agent
+if [ $? -ne 0 ]; then
+    rm -f ${SSH_AGENT_FILE}
+fi
+
+INFOFILE=${DOT_SSH}/agent-info
+echo -n "ssh-agent: "
+. ${INFOFILE}
+ssh-add -l > /dev/null
+if [ $? = 2 ] ; then
+    echo -n "ssh-agent: start...."
+    ssh-agent -a ${SSH_AGENT_FILE} > ${INFOFILE}
+    . ${INFOFILE}
+fi
+
+if ssh-add -l > /dev/null ; then
+    echo "ssh-agent: Identity is already stored."
+else
+    ssh-add ${DOT_SSH}/id_rsa
+fi
+
+function slogin {
+    if [ "$1" = "localhost" ]; then
+        ssh-keygen -R localhost
+    fi
+    /usr/bin/slogin -AY $*
+}
+
+export SSH_BASE_SERVER=test
+
+function h {
+    if [ "$1" = "list" ]; then
+        less ${DOT_SSH}/hosts
+        return 0
+    fi
+    H=$1
+    if [ ! "$H" ]; then
+        H=$SSH_BASE_SERVER
+    fi
+    ${DOT_SSH}/chg_config $H
+    IP=`grep "^${H} " ${DOT_SSH}/hosts | awk '{print $3}'`
+    slogin -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${IP}
+}
+
+function f {
+    if [ "$1" = "list" ]; then
+        less ${DOT_SSH}/hosts
+        return 0
+    fi
+    H=$1
+    if [ ! "$H" ]; then
+        H=$SSH_BASE_SERVER
+    fi
+    ${DOT_SSH}/chg_config $H
+    IP=`grep "^${H} " ${DOT_SSH}/hosts | awk '{print $3}'`
+    sftp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${IP}
+}
+
+function ff {
+    if [ "$1" = "list" ]; then
+        less ${HOME}/.lftp/bookmarks
+        return 0
+    fi
+    H=$1
+    if [ ! "$H" ]; then
+        H=$SSH_BASE_SERVER
+    fi
+    ${DOT_SSH}/chg_config $H
+    lftp $H
+}
+

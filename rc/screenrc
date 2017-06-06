@@ -1,0 +1,163 @@
+#source defaults
+
+# Tell applications  who this is.   The ``screen-256color'' terminfo is  in the
+# ncurses-term package for debian.
+term xterm-256color
+# enable background-color-erase setting.
+defbce on
+# use bright colors for bold text.
+attrcolor b '.I'
+# enable 256 color
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+# don't resize terminal width when re-attached.
+termcapinfo xterm 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
+termcapinfo xterm-256color 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
+
+# continuous switch focus to other region(like vi)
+bind ^J eval 'focus down'  #'command -c cfocus'
+bind ^K eval 'focus up'    #'command -c cfocus'
+bind ^L eval 'focus next'  #'command -c cfocus'
+bind ^H eval 'focus prev'  #'command -c cfocus'
+bind -c cfocus ^J eval 'focus down'   'command -c cfocus'
+bind -c cfocus ^K eval 'focus up'     'command -c cfocus'
+bind -c cfocus ^T eval 'focus top'    'command -c cfocus'
+bind -c cfocus ^B eval 'focus bottom' 'command -c cfocus'
+bind -c cfocus ^L eval 'focus next'   'command -c cfocus'
+bind -c cfocus ^H eval 'focus prev'   'command -c cfocus'
+
+# TEST
+bind - eval split select 0
+bind | eval 'split -v' select 0
+bind q eval remove select 0
+
+# continuous resize region
+# orverride default `r'(wrap) mapping.
+bind r eval 'echo "Resize window"' 'command -c cresize'
+bind -c cresize  command
+bind -c cresize j eval 'resize +1' 'command -c cresize'
+bind -c cresize k eval 'resize -1' 'command -c cresize'
+bind -c cresize J eval 'resize +10' 'command -c cresize'
+bind -c cresize K eval 'resize -10' 'command -c cresize'
+bind -c cresize = eval 'resize ='   'command -c cresize'
+bind -c cresize n eval 'resize min' 'command -c cresize'
+bind -c cresize x eval 'resize max' 'command -c cresize'
+
+# continuous switch to other window
+bind ^N eval 'next' 'command -c cselect'
+bind ^P eval 'prev' 'command -c cselect'
+bind -c cselect ^N eval 'next' 'command -c cselect'
+bind -c cselect ^P eval 'prev' 'command -c cselect'
+
+# refuses yet another hack in rpm packaged screenrc.
+# both ] and ^] does write the paste (default unnamed) buffer.
+#bind ^] paste .
+
+# Keys
+escape p
+zombie 
+bind t title
+bind w windowlist -b
+bind p paste [.]
+bind o copy
+bind u eval "encoding UTF-8"
+bind e eval "encoding eucJP"
+#bind s eval "encoding SJIS"
+bind j eval "encoding jis"
+#setenv LANG ja_JP.UTF-8
+
+defencoding UTF-8
+
+# default shell to invoke with ^T-c
+shell /bin/zsh
+#shell /bin/bash
+
+# The scroll buffer
+defscrollback 8195
+markkeys h=:l=:$=:=:=
+
+# Messages
+msgwait 2
+msgminwait 1
+
+sorendition "+rb .G"
+
+caption always "%{=r dd}%-Lw%40L>%?%F%{=b dG}%:[%? %n%f %t %?%F%{-}%:]%?%+Lw %?%F%-024= %Y/%m/%d %02C:%s %A %:%=%?"
+# caption string description:
+#
+# %?          - Start of a conditional statement.
+#  %F         - Use this part of the statement if the window has focus (i.e. it
+#               is the only window or the currently active one).
+#  %{= gW}    - bright white on green.
+# %:          - else
+#  %{= Kk}    - bright black on black
+# %?          - End conditional statement.
+#  %2n        - number of the current window with left 2 padding
+#  %f         - flags for current window
+#  %07=       - left 7 padding for window number and flags
+#  %t         - title of current window
+#  %=         - truncation/padding point
+
+hardstatus string "%?%h%:%t (screen #%n on %H)%?"
+# hardstatus string description:
+#
+#  %m         - Two-letter month number
+#  %d         - Two-letter day number
+#  %02c       - time (hh:mm) in 24 hour format
+#  %s         - seconds
+# %{= .g}     - green color on default background
+#  %H         - host name.
+# %{-}        - undo last color change(so now we're back to default color)
+#  %L=        - left padding start here
+#  %-w        - window list up to but not including the current window (-)
+#  %45L>      - truncation/padding marker; place this point about 45% of the
+#               way into the display area (45)
+# %{=u g.}    - default color on green, and underline.
+#  %n         - number of the current window.
+#  %t         - title of current window.
+# %{-}        - undo last color change
+#  %+w        - window list from the next window on (-)
+#  %-17<      - truncation/padding point. place this point zero spaces (0)
+#               from the right margin (-).
+#  %=         - truncation/paddion point.
+# %{= .y}     - yellow on default background.
+#  %l         - host load average.
+# APPENDIX: STRING ESCAPES (make extracts from screen (1))
+#
+# The attribute set can either be specified as hexadecimal number
+# or a combination of the following letters:
+#
+#   d     dim
+#   u     underline
+#   b     bold
+#   r     reverse
+#   s     standout
+#   B     blinking
+#
+# Colors are coded either as a hexadecimal number or two letters specifying
+# the desired background and foreground color (in that order).
+# The following colors are known:
+#
+#   k     black
+#   r     red
+#   g     green
+#   y     yellow
+#   b     blue
+#   m     magenta
+#   c     cyan
+#   w     white
+#   d     default color
+#   .     leave color unchanged
+#
+# The capitalized versions of the letter specify bright colors.
+# You can also use the pseudo-color `i' to set just the brightness and leave the color unchanged.
+
+# default screens
+chdir
+screen -t A:local 0 bash -l
+screen -t B:local 1 bashh-l
+
+source ${BD}/screen/layout/master
+
+# include hostlocal .screenrc
+source 'screenrc.local'
+

@@ -1,0 +1,79 @@
+
+let $DOTVIM = "$BD/vim"
+let $DICT_BASE = $DOTVIM . "/dictionary/"
+let $DICT = $DICT_BASE . "english.dict"
+
+set nocompatible
+set undolevels=1000
+set runtimepath+=$DOTVIM
+set fileformats=unix,dos
+set clipboard+=unnamed
+set noautoindent
+set hidden
+"set scrolloff=999
+set visualbell
+set listchars=tab:>-
+set list
+set showmode
+set showmatch
+set number
+"set ignorecase
+set shiftwidth=4
+set tabstop=4
+"set tabstop=8
+set whichwrap=h,l
+"set binary
+"set columns=80
+set nowrap
+set expandtab
+syntax enable
+set viminfo='50,\"50,%
+set viminfo+=n${BD}/.tmp/viminfo
+set undolevels=1000
+set nobackup
+set dictionary=$DICT
+set showcmd
+set ruler
+set incsearch
+set history=100
+set laststatus=2
+set backspace=2
+set nohlsearch
+set bg=dark
+
+colorscheme blackdust
+colorscheme BlackSea
+colorscheme desert256
+
+let java_highlight_all=1
+let java_space_errors=1
+let java_highlight_functions=1
+highlight Comment term=bold ctermfg=gray guifg=gray
+highlight Directory term=bold ctermfg=gray guifg=gray
+highlight htmlLink term=italic ctermfg=gray guifg=gray
+
+highlight WhitespaceEOL ctermbg=yellow
+match WhitespaceEOL /\s\+$\|　/
+
+function! FileStatus()
+    let str = ''
+    let str = str . '[' . &fileformat . ']'
+    if has('multi_byte') && &fileencoding != ''
+        let str = str . '[' . &fileencoding . ']'
+    endif
+    return str
+endfunction
+set statusline=[%n]\ %f\ %(\ %M%R%H)%)\=%{FileStatus()}\ Pos=<%l\,%c%V>\ ASCII=%b\ HEX=%B
+
+set enc=eucjp
+set fencs=iso-2022-jp,utf-8,utf-16,ucs-2-internal,ucs-2
+if has('iconv')
+    set fileencodings+=iso-2022-jp
+    set fileencodings+=utf-8,ucs-2le,ucs-2
+endif
+if &encoding ==# 'euc-jp'
+    set fileencodings+=cp932
+else
+    set fileencodings+=euc-jp
+endif
+

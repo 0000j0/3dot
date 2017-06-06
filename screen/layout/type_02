@@ -1,0 +1,20 @@
+
+layout remove only
+layout new only
+source $BD/screen/layout/only.layout
+layout autosave on
+
+layout remove 1P1-V
+layout new 1P1-V
+source $BD/screen/layout/1P1-V.layout
+layout save 1P1-V
+layout autosave on
+
+layout remove 1P1-H
+layout new 1P1-H
+source $BD/screen/layout/1P1-H.layout
+layout save 1P1-H
+layout autosave on
+
+layout select only
+

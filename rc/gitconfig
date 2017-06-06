@@ -1,0 +1,15 @@
+[user]
+    email = user@localhost
+[push]
+    default = simple
+[core]
+    editor = vim
+[alias]
+    l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    ll = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    b = branch -a
+    co = checkout
+    cm = commit
+    d = diff --word-diff
+    s = status
+

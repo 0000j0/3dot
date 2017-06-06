@@ -1,0 +1,32 @@
+
+layout remove only
+layout new only
+source $BD/screen/layout/only.layout
+layout autosave on
+
+layout remove 1M1V
+layout new 1M1V
+source $BD/screen/layout/1M1V.layout
+layout save 1M1V
+layout autosave on
+
+layout remove 2W
+layout new 2W
+source $BD/screen/layout/2W.layout
+layout save 2W
+layout autosave on
+
+layout remove 3W
+layout new 3W
+source $BD/screen/layout/3W.layout
+layout save 3W
+layout autosave on
+
+layout remove 4W
+layout new 4W
+source $BD/screen/layout/4W.layout
+layout save 4W
+layout autosave on
+
+layout select only
+

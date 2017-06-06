@@ -1,0 +1,17 @@
+
+# Layout command prefix C-q
+bind ^W eval 'command -c layout' 'layout show'
+bind -c layout ^W eval 'command -c layout' 'layout show'
+
+# Choose n-th layout
+bind -c layout 0 eval 'command -c layout' 'layout select 0' 'layout show'
+bind -c layout 1 eval 'command -c layout' 'layout select 1' 'layout show'
+bind -c layout 2 eval 'command -c layout' 'layout select 2' 'layout show'
+bind -c layout 3 eval 'command -c layout' 'layout select 3' 'layout show'
+bind -c layout 4 eval 'command -c layout' 'layout select 4' 'layout show'
+bind -c layout 5 eval 'command -c layout' 'layout select 5' 'layout show'
+bind -c layout 6 eval 'command -c layout' 'layout select 6' 'layout show'
+bind -c layout 7 eval 'command -c layout' 'layout select 7' 'layout show'
+bind -c layout 8 eval 'command -c layout' 'layout select 8' 'layout show'
+bind -c layout 9 eval 'command -c layout' 'layout select 9' 'layout show'
+

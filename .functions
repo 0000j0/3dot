@@ -1,0 +1,62 @@
+
+function sc {
+    case $1 in
+    '-b') rc_dir=${BD}/screen/base
+          shift ;;
+    *)    rc_dir=${BD}/screen/local
+    esac
+    if [ ! "$1" ]; then
+        echo "Usage: sc [-b] <conf> <tag>"
+        return 1
+    fi
+
+    tag=$1
+    conf=$2
+    if [ "${conf}" ]; then
+        sc_rc=${rc_dir}/${NODENAME}.${conf}
+        sc_tag=${tag}.${conf}
+    else
+        sc_rc=${rc_dir}/${NODENAME}
+        sc_tag=${tag}
+    fi
+
+    if [ ! -f ${sc_rc} ]; then
+        echo "file not found : ${sc_rc}"
+        return 1
+    fi
+
+    cd ${RD}
+    ln -sf ${sc_rc} screenrc.local
+
+    scs=`screen -list | grep Detache | grep ${sc_tag} | awk '{print $1}' | head -1`
+    if [ -n "${scs}" ]; then
+        echo "Screen Attache : ${scs}"
+        sleep 1
+        screen -c ${RD}/screenrc -r ${scs}
+    else
+        echo "Screen New : ${sc_tag}"
+        sleep 1
+        screen -c ${RD}/screenrc -S ${sc_tag} -c ${SCREENRC}
+    fi
+}
+
+function scl() {
+    screen -ls | grep "("
+
+    test ! "$1" && exit 0
+
+    re=`screen -ls | grep "\.$1	"`
+    test ! "${re}" && exit 0
+
+    pid=`echo ${re} | cut -d '.' -f 1`
+
+    echo kill ${pid}
+    kill ${pid}
+}
+
+function scb {
+    sc -b $*
+}
+
+return 0
+

@@ -1,0 +1,27 @@
+
+export BD=${PWD}
+export TERM=xterm-256color
+
+. ${BD}/.env
+
+export RD=${BD}/rc
+export ZDOTDIR=${BD}
+export VIMRC=${RD}/vimrc
+export SCREENRC=$RD/screenrc
+
+export SCREENDIR=${BD}/.tmp/screen
+mkdir -p ${SCREENDIR}
+chmod 700 ${SCREENDIR}
+ls -ld ${SCREENDIR} | cut -c 7 | grep -q x && unset SCREENDIR
+
+if [ "${DOT_SSH}" ]; then
+    . ${DOT_SSH}/agent-start
+fi
+
+. ${RD}/alias
+. ${BD}/.functions
+
+eval `dircolors -b ${RD}/DIR_COLORS`
+
+return 0
+

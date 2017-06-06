@@ -1,0 +1,11 @@
+
+screen -t 001   3
+screen -t 002   4
+screen -t 003   5
+
+caption always '%?%F%{= gW}%:%{= Kk}%?%2n%f%07=%t%='
+hardstatus alwayslastline ' %{= .y}R[%H]%{-} %L=%-w%45L>%{=u wk}%n %t%{-}%+w %-17<%=%{= .m}%m/%d %02c:%s %A '
+
+source $BD/screen/layout/type_02
+layout select 1P1-V
+

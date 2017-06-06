@@ -1,0 +1,4 @@
+alias ls='ls --color=auto'
+alias vim='vim -u ${RD}/vimrc'
+alias screen='screen -c ${RD}/screenrc'
+alias history='history -i'
