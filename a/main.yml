@@ -1,0 +1,74 @@
+
+- set_fact:
+    vm_host: "{{ hostvars[vm[inventory_hostname].host].ansible_ssh_host }}"
+
+- name: check domain
+  shell: "virsh list --all | grep -q ' {{ vm[inventory_hostname].name }} '"
+  register: has_vm
+  delegate_to: "{{ vm_host }}"
+  changed_when: False
+  failed_when: False
+
+- block: # copy image
+  - set_fact:
+      img_src: "{{ vm[inventory_hostname].img.src }}"
+      img_dest: "{{ vm[inventory_hostname].img.dest }}"
+      ssh_key: "{{ hostvars[vm[inventory_hostname].host].playbook_dir }}/.ssh/id_rsa"
+
+  - name: sync image
+    script: "scripts/copy_vm.sh {{ img_src }} root@{{ vm_host }}:{{ img_dest }} {{ ssh_key }}"
+    delegate_to: localhost
+
+  when: has_vm.rc != 0
+
+- name: check command
+  stat:
+    path: /bin/virt-edit
+  register: is_file
+  delegate_to: "{{ vm_host }}"
+  run_once: True
+
+- block: # install packages
+  - set_fact:
+      tmp_dir: /.ansible/kvm
+
+  - name: create tmp dir
+    file:
+      path: "{{ tmp_dir }}"
+      state: directory
+    delegate_to: "{{ vm_host }}"
+    run_once: True
+    changed_when: false
+
+  - name: copy rpms
+    copy:
+      src: "{{ item }}"
+      dest: "{{ tmp_dir }}"
+    with_fileglob: rpms/*.rpm
+    delegate_to: "{{ vm_host }}"
+    run_once: True
+
+  - name: install rpms
+    shell: "cd {{ tmp_dir }} && LANG=C rpm --replacepkgs -i `ls *.rpm` 2>/dev/null"
+    delegate_to: "{{ vm_host }}"
+    run_once: True
+
+  when: is_file.stat.exists == False
+
+
+- block:
+  - name: copy - kvm xml
+    template:
+      src: "{{ vm[inventory_hostname].xml.src }}"
+      dest: "{{ vm[inventory_hostname].xml.dest }}"
+    register: change_xml
+    delegate_to: "{{ vm_host }}"
+
+  - set_fact:
+      ipcfg: "eth0:{{ hostvars[inventory_hostname].ansible_ssh_host }}:{{ nw_addr.split('/')[1] }}"
+
+  - name: exec script
+    script: "scripts/mng_kvm.sh {{ vm[inventory_hostname].xml.dest }} {{ ipcfg }}"
+    delegate_to: "{{ vm_host }}"
+    when: change_xml|changed
+
