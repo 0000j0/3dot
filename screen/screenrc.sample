@@ -1,0 +1,56 @@
+# morimorihoge screenrc
+
+escape \233\233
+zombie
+
+hardstatus on
+defbce on
+
+# Protection from attacks
+multiuser off
+idle off
+
+vbell off
+autodetach on
+startup_message off
+deflogin off
+autonuke on
+defscrollback 0
+
+altscreen on
+
+attrcolor b ".I"
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+defbce on
+
+# set $TERM env
+term screen
+
+# change screen ctrl key to C-z
+#escape ^Z^Z # C-z C-z : send ^Z to process
+escape p
+bind 'Z' suspend # C-z z, C-z Z: suspend screen
+bind 'z' suspend
+bind 'K' kill # kill current screen
+
+zombie
+
+bind w windowlist -b
+defscrollback 8192
+markkeys h=^B:l=^F:$=^E:^U=^Z:^D=^V
+
+shelltitle '$ |shell'
+
+# message display time
+msgwait 3
+msgminwait 2
+
+# display status
+hardstatus alwayslastline "%?%h%:#%n %t @%H)%? %{= dd}%-035= %{= wB}%l %Y-%m-%d %02c:%s"
+caption always "%{=r dd}%-Lw%40L>%?%F%{+b kG}%:[%{=r dd}%? %n%f %t %?%F%{-}%:]%?%+Lw"
+
+# split line color
+sorendition "+rb .R"
+
+# change directory to home
+chdir
